@@ -25,7 +25,7 @@ def generate_launch_description():
         ('rgb/image', '/camera/image_raw'),
         ('rgb/camera_info', '/camera/camera_info'),
         ('depth/image', '/camera/depth/image_raw'),
-        ('odom', '/odom')
+        ('odom', '/diff_drive_controller/odom')
     ]
 
     rgbd_sync = Node(
