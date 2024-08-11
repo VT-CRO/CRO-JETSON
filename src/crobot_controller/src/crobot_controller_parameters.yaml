@@ -1,0 +1,38 @@
+crobot_controller:
+  front_left_wheel_name: {
+    type: string,
+    default_value: "",
+    description: "Name of front left wheel joint",
+    validation: {
+      not_empty<>: []
+    }
+  }
+  back_left_wheel_name: {
+    type: string,
+    default_value: "",
+    description: "Name of back left wheel joint",
+    validation: {
+      not_empty<>: []
+    }
+  }
+  front_right_wheel_name: {
+    type: string,
+    default_value: "",
+    description: "Name of front right wheel joint",
+    validation: {
+      not_empty<>: []
+    }
+  }
+  back_right_wheel_name: {
+    type: string,
+    default_value: "",
+    description: "Name of back right wheel joints",
+    validation: {
+      not_empty<>: []
+    }
+  }
+  position_feedback: {
+    type: bool,
+    default_value: false,
+    description: "If set to true the odometry of the robot will be calculated from the commanded values and not from feedback.",
+  }
