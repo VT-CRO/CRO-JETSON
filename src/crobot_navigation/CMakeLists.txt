@@ -5,11 +5,29 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+set(THIS_PACKAGE_INCLUDE_DEPENDS
+  rclcpp
+  rclcpp_action
+  nav2_msgs
+  behaviortree_cpp
+  behaviortree_ros2
+  yaml-cpp
+  tf2
+  tf2_geometry_msgs
+)
+
 # find dependencies
 find_package(ament_cmake REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
-# find_package(<dependency> REQUIRED)
+foreach(Dependency IN ITEMS ${THIS_PACKAGE_INCLUDE_DEPENDS})
+  find_package(${Dependency} REQUIRED)
+endforeach()
+
+include_directories(include)
+add_executable(crobot_navigation_node src/behavior_node.cpp src/go_to_position.cpp)
+ament_target_dependencies(crobot_navigation_node ${THIS_PACKAGE_INCLUDE_DEPENDS})
+target_link_libraries(crobot_navigation_node ${YAML_CPP_LIBRARIES})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -24,8 +42,18 @@ if(BUILD_TESTING)
 endif()
 
 install(
-  DIRECTORY launch config
+  DIRECTORY tree launch config
   DESTINATION share/${PROJECT_NAME}
 )
+
+install(
+  DIRECTORY include/
+  DESTINATION include/crobot_navigation
+)
+
+install(TARGETS crobot_navigation_node
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 
 ament_package()
