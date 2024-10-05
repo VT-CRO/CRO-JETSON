@@ -15,7 +15,7 @@ RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/r
 RUN apt-get update
 
 # Install ROS
-RUN apt-get install -y ros-humble-ros-base ros-humble-demo-nodes-cpp
+RUN apt-get install -y ros-humble-desktop ros-humble-demo-nodes-cpp
 RUN apt-get install -y python3-argcomplete wget unzip nano build-essential
 
 # Configure Enviroment for ROS
