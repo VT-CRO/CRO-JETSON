@@ -152,5 +152,59 @@ namespace crobot_controller
             last_command_msg->twist.linear.x = 0.0;
             last_command_msg->twist.angular.z = 0.0;
         }
+
+        Twist command = *last_command_msg;
+        double & linear_command_x = command.twist.linear.x;
+        double & linear_command_y = command.twist.linear.y;
+        double & angular_command = command.twist.angular.z;
+
+        previous_update_timestamp_ = time;
+
+        const double wheel_separation = params_.wheel_separation_multiplier * params_.wheel_separation;
+        const double back_left_wheel_radius = params_.back_left_wheel_radius_multiplier * params_.wheel_radius;
+        const double back_right_wheel_radius = params_.back_right_wheel_radius_multiplier * params_.wheel_radius;
+        const double front_left_wheel_radius = params_.front_left_wheel_radius_multiplier * params_.wheel_radius;
+        const double front_right_wheel_radius = params_.front_right_wheel_radius_multiplier * params_.wheel_radius;
+
+        // if (params_.open_loop)
+        // {
+            // odometry_.updateOpenLoop()
+        // } else {
+        //     // get feedback
+
+        //     // check if feedback is valid
+
+        //     // update odometry
+        // }
+
+        tf2::Quaternion orientation;
+        // orientation.setRPY(0.0, 0.0, odometry)
+
+        bool should_publish = false;
+        
+        // publish updated odometry if should publish
+
+        auto & last_command = previous_commands_.back().twist;
+        auto & second_to_last_command = previous_commands_.front().twist;
+        
+        // apply linear limits on linear and angular commands
+
+        previous_commands_.pop();
+        previous_commands_.emplace(command);
+
+        // publish limited velocity
+        // if (publish_limited_velocity_ && reality)
+
+        const double back_left_wheel_velocity = (linear_command_y - linear_command_x - 12 * (angular_command)) / back_left_wheel_radius;
+        const double back_right_wheel_velocity = (linear_command_y - linear_command_x + 12 * (angular_command)) / back_right_wheel_radius;
+        const double front_left_wheel_velocity = (linear_command_y + linear_command_x - 12 * (angular_command)) / front_left_wheel_radius;
+        const double front_right_wheel_velocity = (linear_command_y + linear_command_x + 12 * (angular_command)) / front_right_wheel_radius;
+
+        registered_back_left_handle.velocity.get().set_value(back_left_wheel_velocity);
+        registered_back_right_handle.velocity.get().set_value(back_right_wheel_velocity);
+        registered_front_left_handle.velocity.get().set_value(front_left_wheel_velocity);
+        registered_front_right_handle.velocity.get().set_value(front_right_wheel_velocity);
+
+        return controller_interface::return_type::OK;
     }
 }

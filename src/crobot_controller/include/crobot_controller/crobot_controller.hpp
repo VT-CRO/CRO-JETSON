@@ -75,11 +75,22 @@ namespace crobot_controller
             const rclcpp_lifecycle::State &previous_state) override;
 
     protected:
+        struct WheelHandle
+        {
+            std::reference_wrapper<const hardware_interface::LoanedStateInterface> feedback;
+            std::reference_wrapper<hardware_interface::LoanedCommandInterface> velocity;
+        };
+
         const char * feedback_type() const;
-        bool reset();
-        void halt();
-        
-        bool is_halted = false;
+        controller_interface::CallbackReturn configure_side(
+            const std::string & side, const std::vector<std::string> & wheel_names,
+            WheelHandle registered_handle
+        );
+
+        WheelHandle registered_back_left_handle;
+        WheelHandle registered_back_right_handle;
+        WheelHandle registered_front_left_handle;
+        WheelHandle registered_front_right_handle;
         
         std::shared_ptr<ParamListener> param_listener_;
         Params params_;
@@ -87,10 +98,16 @@ namespace crobot_controller
         rclcpp::Time previous_update_timestamp_{0};
 
         std::chrono::milliseconds cmd_vel_timeout_{500};
+
         realtime_tools::RealtimeBox<std::shared_ptr<Twist>> received_velocity_msg_ptr_{nullptr};
         std::queue<Twist> previous_commands_;
         bool subscriber_is_active_ = false;
         rclcpp::Subscription<Twist>::SharedPtr velocity_command_subscriber_ = nullptr;
+
+        bool reset();
+        void halt();
+        
+        bool is_halted = false;
     };
 }
 
