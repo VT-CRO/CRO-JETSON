@@ -22,7 +22,6 @@ namespace crobot_hardware
         {
             return hardware_interface::CallbackReturn::ERROR;
         }
-
-        cfg_.left_wheel_name = 
+        
     }
 }
