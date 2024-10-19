@@ -31,10 +31,15 @@ crobot_controller:
       not_empty<>: []
     }
   }
+  open_loop: {
+    type: bool,
+    default_value: False,
+    description: "If set to true the odometry of the robot will be calculated from the commanded values and not from feedback."
+  }
   position_feedback: {
     type: bool,
     default_value: false,
-    description: "If set to true the odometry of the robot will be calculated from the commanded values and not from feedback.",
+    description: "If set to true the odometry will be calculated based on encoder feedback",
   }
   wheel_separation: {
     type: double,

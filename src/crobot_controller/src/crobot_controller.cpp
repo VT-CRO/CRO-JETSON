@@ -166,16 +166,16 @@ namespace crobot_controller
         const double front_left_wheel_radius = params_.front_left_wheel_radius_multiplier * params_.wheel_radius;
         const double front_right_wheel_radius = params_.front_right_wheel_radius_multiplier * params_.wheel_radius;
 
-        // if (params_.open_loop)
-        // {
+        if (params_.open_loop)
+        {
             // odometry_.updateOpenLoop()
-        // } else {
-        //     // get feedback
+        } else {
+            // get feedback
 
-        //     // check if feedback is valid
+            // check if feedback is valid
 
-        //     // update odometry
-        // }
+            // update odometry
+        }
 
         tf2::Quaternion orientation;
         // orientation.setRPY(0.0, 0.0, odometry)
@@ -186,7 +186,7 @@ namespace crobot_controller
 
         auto & last_command = previous_commands_.back().twist;
         auto & second_to_last_command = previous_commands_.front().twist;
-        
+
         // apply linear limits on linear and angular commands
 
         previous_commands_.pop();
@@ -200,11 +200,21 @@ namespace crobot_controller
         const double front_left_wheel_velocity = (linear_command_y + linear_command_x - 12 * (angular_command)) / front_left_wheel_radius;
         const double front_right_wheel_velocity = (linear_command_y + linear_command_x + 12 * (angular_command)) / front_right_wheel_radius;
 
-        registered_back_left_handle.velocity.get().set_value(back_left_wheel_velocity);
-        registered_back_right_handle.velocity.get().set_value(back_right_wheel_velocity);
-        registered_front_left_handle.velocity.get().set_value(front_left_wheel_velocity);
-        registered_front_right_handle.velocity.get().set_value(front_right_wheel_velocity);
+        // registered_back_left_handle.velocity.get().set_value(back_left_wheel_velocity);
+        // registered_back_right_handle.velocity.get().set_value(back_right_wheel_velocity);
+        // registered_front_left_handle.velocity.get().set_value(front_left_wheel_velocity);
+        // registered_front_right_handle.velocity.get().set_value(front_right_wheel_velocity);
 
         return controller_interface::return_type::OK;
+    }
+
+    controller_interface::CallbackReturn CrobotController::on_activate(
+        const rclcpp_lifecycle::State &
+    )
+    {
+        // const auto back_left_result = configure_side("back_left", params_.back_left_wheel_name, registered_back_left_handle);
+        // const auto back_right_result = configure_side("back_right", params_.back_right_wheel_name, registered_back_right_handle);
+        // const auto front_left_result = configure_side("front_left", params_.front_left_wheel_name, registered_front_left_handle);
+        // const auto front_right_result = configure_side("front_right", params_.front_right_wheel_name, registered_front_right_handle);
     }
 }

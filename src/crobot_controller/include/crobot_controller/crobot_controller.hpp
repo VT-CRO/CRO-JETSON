@@ -19,7 +19,7 @@
 #include "crobot_controller/visibility_control.h"
 #include "geometry_msgs/msg/twist_stamped.hpp"
 #include "nav_msgs/msg/odometry.hpp"
-#include "odometry.hpp"
+#include "crobot_controller/odometry.hpp"
 #include "rclcpp_lifecycle/state.hpp"
 #include "realtime_tools/realtime_box.h"
 #include "realtime_tools/realtime_publisher.h"
@@ -83,17 +83,19 @@ namespace crobot_controller
 
         const char * feedback_type() const;
         controller_interface::CallbackReturn configure_side(
-            const std::string & side, const std::vector<std::string> & wheel_names,
+            const std::string & side, const std::vector<std::string> & wheel_name,
             WheelHandle registered_handle
         );
 
-        WheelHandle registered_back_left_handle;
-        WheelHandle registered_back_right_handle;
-        WheelHandle registered_front_left_handle;
-        WheelHandle registered_front_right_handle;
+        WheelHandle* registered_back_left_handle;
+        WheelHandle* registered_back_right_handle;
+        WheelHandle* registered_front_left_handle;
+        WheelHandle* registered_front_right_handle;
         
         std::shared_ptr<ParamListener> param_listener_;
         Params params_;
+
+        Odometry odometry_;
 
         rclcpp::Time previous_update_timestamp_{0};
 
